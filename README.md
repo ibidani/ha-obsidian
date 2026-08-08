@@ -4,6 +4,10 @@ Run a full desktop instance of [Obsidian](https://obsidian.md/) inside your Home
 
 ![Supports aarch64 Architecture][aarch64-shield] ![Supports amd64 Architecture][amd64-shield]
 
+> This app was formerly known as an **add-on** — Home Assistant 2026.2 renamed
+them to **apps**. The repository folder, config keys, and CI stay on the classic
+`add-on`/`addon` names for backwards compatibility.
+
 ## About
 
 This app runs a headless Obsidian desktop instance within a container managed by
@@ -18,7 +22,7 @@ so it follows the same container conventions (PUID/PGID, `abc` user, s6-overlay 
 Key capabilities:
 
 - **Obsidian in the browser** — full desktop UI served over HTTPS via Home Assistant Ingress; no extra network exposure required.
-- **Persistent vault on disk** — your notes are stored under `/config` (the add-on's container file) and survive restarts.
+- **Persistent vault on disk** — your notes are stored under `/config` (the app's container file) and survive restarts.
 - **Auto-update disabled** — the pinned container image is what updates; Obsidian's own updater is switched off so nothing overwrites the running build.
 - **Works on first boot** — a default profile is bootstrapped automatically, so there's no interactive welcome/download wizard blocking the UI.
 
@@ -28,11 +32,11 @@ Key capabilities:
 
 ## Installation
 
-1. Go to **Settings → Add-ons → Add-on Store**, select the repository this project is
-   published to (e.g. an Add-ons repository you maintain), and find **Obsidian**.
+1. Go to **Settings → Apps**, select the repository this project is published to
+   (e.g. an Apps repository you maintain), and find **Obsidian**.
 2. Click **Install** and wait for the installation to complete.
-3. Start the add-on.
-4. Open the add-on's **open Web UI** button — Obsidian loads in your browser.
+3. Start the app.
+4. Open the **Web UI** button — Obsidian loads in your browser.
 
 No changes to your system configuration, MQTT, or integrations are required.
 
@@ -41,11 +45,11 @@ No changes to your system configuration, MQTT, or integrations are required.
 1. Clone this repository and make sure `.github/docker-lock.json` and `obsidian/config.yaml` point at the image you intend to publish.
 2. Run the CI (push to `master` triggers it), which builds, signs, and publishes the
    multi-architecture image to `ghcr.io/ibidani/ha-obsidian`.
-3. Point a Home Assistant add-on repository at this repo and install as above.
+3. Point a Home Assistant app repository at this repo and install as above.
 
 ## Configuration
 
-The add-on is pre-configured to work immediately. The only settings are Docker
+The app is pre-configured to work immediately. The only settings are Docker
 environment variables the base image passes through.
 
 ### Application
@@ -88,23 +92,23 @@ direct (non-Ingress) access.
 
 Your vault (and the Obsidian profile/config) live at:
 
-```
+```text
 /config/.config/obsidian/
 ```
 
-`/config` is mapped to the add-on's container folder. To back up or share your notes,
+`/config` is mapped to the app's container folder. To back up or share your notes,
 use the Home Assistant backup system or the file-management tools (e.g. Samba/File editor)
 to read/write this folder.
 
 ## Updating
 
-The add-on ships an exact pinned base image version. Updates come by:
+The app ships an exact pinned base image version. Updates come by:
 
 1. **Automatic image pins** — CI checks the upstream image and updates the digest pin
    in `obsidian/Dockerfile` (see CI workflow).
 2. **App updates** — bump `version` in `obsidian/config.yaml` and rebuild/publish via CI.
 
-Rebuild the image (or check for add-on updates in the store) to pull in changes.
+Rebuild the image (or check for app updates in the store) to pull in changes.
 
 ## Support
 
